@@ -1,0 +1,8 @@
+ultralytics
+opencv-python
+pyserial
+fastapi
+uvicorn[standard]
+websockets
+azure-eventgrid
+azure-core

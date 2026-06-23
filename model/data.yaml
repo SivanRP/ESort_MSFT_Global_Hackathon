@@ -1,0 +1,15 @@
+# Dataset config for yolo26 / yolov8 instance segmentation.
+# Roboflow's export produces its own data.yaml with absolute paths; this file
+# documents the canonical class order the backend expects. Class indices MUST
+# match this order so detector.py's names map lines up with serial_io.CHAR.
+
+path: .            # dataset root (override with the Roboflow export path)
+train: train/images
+val: valid/images
+test: test/images
+
+names:
+  0: pcb
+  1: battery
+  2: metal
+  3: plastic
