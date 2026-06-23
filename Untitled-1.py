@@ -227,9 +227,9 @@ def cam_loop():
             img_display = img.resize((640, 480), Image.LANCZOS)
             current_frame[0] = img_display
 
-            # Classify every 6 seconds (respect Groq rate limits)
+            # Classify every 5 seconds (max speed within Groq rate limits)
             now = time.time()
-            if now - last_classify >= 6.0 and not classifying:
+            if now - last_classify >= 5.0 and not classifying:
                 last_classify = now
                 classifying = True
 
