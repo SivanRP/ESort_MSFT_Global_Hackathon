@@ -59,12 +59,12 @@ CLASS_MAP = {
 }
 
 CATEGORY_COLORS = {
-    "Battery": "#FF4444",
-    "PCB": "#44FF44",
-    "Plastic": "#4488FF",
-    "Metal": "#FFAA00",
-    "Misc": "#AAAAAA",
-    "Nothing": "#555555",
+    "Battery": "#D32F2F",
+    "PCB": "#2E7D32",
+    "Plastic": "#1565C0",
+    "Metal": "#E65100",
+    "Misc": "#757575",
+    "Nothing": "#9E9E9E",
 }
 
 
@@ -163,31 +163,49 @@ def send_to_arduino(ser, category):
 # -----------------------------
 # GUI
 # -----------------------------
+BG_WHITE = "#F5F5F5"
+ACCENT_GREEN = "#2E7D32"
+LIGHT_GREEN = "#4CAF50"
+DARK_GREEN = "#1B5E20"
+CARD_BG = "#FFFFFF"
+TEXT_DARK = "#212121"
+TEXT_MID = "#616161"
+
 root = tk.Tk()
-root.title("E-Waste Classifier")
-root.configure(bg="#1a1a2e")
+root.title("E-SORT")
+root.configure(bg=BG_WHITE)
 
-tk.Label(root, text="E-WASTE CLASSIFIER", font=("Segoe UI", 24, "bold"),
-         fg="#00d4aa", bg="#1a1a2e").pack(pady=(15, 5))
-tk.Label(root, text="Groq AI Vision — Free & Fast",
-         font=("Segoe UI", 12), fg="#888888", bg="#1a1a2e").pack(pady=(0, 10))
+# Header bar
+header = tk.Frame(root, bg=ACCENT_GREEN, pady=12)
+header.pack(fill="x")
 
-cam_label = tk.Label(root, bg="#000000", width=640, height=480)
-cam_label.pack(padx=20, pady=5)
+tk.Label(header, text="♻  E-SORT", font=("Segoe UI", 28, "bold"),
+         fg="#FFFFFF", bg=ACCENT_GREEN).pack(side="left", padx=20)
+tk.Label(header, text="Smart E-Waste Sorting System",
+         font=("Segoe UI", 12), fg="#C8E6C9", bg=ACCENT_GREEN).pack(side="left", padx=(10, 0))
 
+# Camera feed with green border
+cam_frame = tk.Frame(root, bg=LIGHT_GREEN, padx=3, pady=3)
+cam_frame.pack(padx=20, pady=(15, 5))
+cam_label = tk.Label(cam_frame, bg="#000000", width=640, height=480)
+cam_label.pack()
+
+# Status indicator
 status_label = tk.Label(root, text="● WARMING UP", font=("Segoe UI", 10),
-                        fg="#FFAA00", bg="#1a1a2e")
+                        fg="#FF8F00", bg=BG_WHITE)
 status_label.pack(pady=(5, 0))
 
-result_frame = tk.Frame(root, bg="#16213e", padx=20, pady=15)
-result_frame.pack(fill="x", padx=20, pady=10)
+# Result card
+result_card = tk.Frame(root, bg=CARD_BG, padx=25, pady=18,
+                       highlightbackground=LIGHT_GREEN, highlightthickness=2)
+result_card.pack(fill="x", padx=20, pady=(8, 15))
 
-result_label = tk.Label(result_frame, text="Starting camera...",
-                        font=("Segoe UI", 22, "bold"), fg="#FFFFFF", bg="#16213e")
+result_label = tk.Label(result_card, text="Starting camera...",
+                        font=("Segoe UI", 24, "bold"), fg=TEXT_DARK, bg=CARD_BG)
 result_label.pack()
 
-detail_label = tk.Label(result_frame, text="Classifications update every 2 seconds",
-                        font=("Segoe UI", 13), fg="#AAAAAA", bg="#16213e")
+detail_label = tk.Label(result_card, text="Classifications update every 5 seconds",
+                        font=("Segoe UI", 13), fg=TEXT_MID, bg=CARD_BG)
 detail_label.pack()
 
 photo_ref = [None]
@@ -273,10 +291,10 @@ def update_gui():
     if display_result[0] is not None:
         detected, category = display_result[0]
         color = CATEGORY_COLORS.get(category, "#FFFFFF")
-        status_label.config(text="● READY", fg="#44FF44")
+        status_label.config(text="● READY", fg="#2E7D32")
 
         if category == "Nothing":
-            result_label.config(text="NO E-WASTE DETECTED", fg="#555555")
+            result_label.config(text="NO E-WASTE DETECTED", fg="#9E9E9E")
             detail_label.config(text="Point camera at an e-waste item")
         else:
             result_label.config(text=f"Sort: {category.upper()}", fg=color)
@@ -296,9 +314,9 @@ cam_thread = threading.Thread(target=cam_loop, daemon=True)
 cam_thread.start()
 
 print("=" * 50)
-print("  E-WASTE CLASSIFIER + SORTER")
+print("  E-SORT — Smart E-Waste Sorting System")
 print("=" * 50)
-print("Using: Groq Llama 4 Scout Vision (free)")
+print("Using: Groq Llama 4 Scout Vision")
 print("Close the window to quit.")
 print("=" * 50)
 
